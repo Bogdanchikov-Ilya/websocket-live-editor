@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <textarea name="data" id="data" cols="30" rows="10"></textarea>
+  <button>Отправить</button>
+  <script>
+  const socket = new WebSocket('ws://localhost:8000/')
+
+  socket.onopen = () => {
+    console.log('Подключено')
+  }
+
+  socket.onmessage = (e) => {
+    console.log(e.data)
+    document.querySelector('#data').value = e.data
+  }
+
+  document.querySelector('button').addEventListener('click', () => {
+    socket.send(JSON.stringify({
+      message: 'Привет',
+      id: 1,
+      username: 'username'
+    }))
+  })
+  document.querySelector('#data').addEventListener('input', (e) => {
+    socket.send(JSON.stringify({
+      message: event.target.value,
+      id: 1,
+      username: 'username'
+    }))
+  })
+
+  </script>
+</body>
+</html>
